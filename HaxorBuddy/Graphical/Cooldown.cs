@@ -27,9 +27,16 @@ namespace HaxorBuddy
             Drawing.OnEndScene -= Drawing_OnEndScene;
         }
 
-        public string GetID()
+        public override string GetID()
         {
-            return "cooldown";
+            return "Cooldown";
+        }
+
+        public override void CreateMenu()
+        {
+            HaxorMenu.haxorMenu.AddGroupLabel("Cooldowns");
+            HaxorMenu.haxorMenu.Add("hmAllyCD", new CheckBox("Show ally cooldowns", false));
+            HaxorMenu.haxorMenu.Add("hmEnemyCD", new CheckBox("Show enemy cooldowns", true));
         }
 
         private Text text;

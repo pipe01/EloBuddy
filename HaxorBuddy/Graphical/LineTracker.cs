@@ -23,6 +23,17 @@ namespace HaxorBuddy
             Drawing.OnDraw -= Drawing_OnDraw;
         }
 
+        public override string GetID()
+        {
+            return "Line Tracker";
+        }
+
+        public override void CreateMenu()
+        {
+            HaxorMenu.haxorMenu.AddGroupLabel("Line tracker");
+            HaxorMenu.haxorMenu.Add("ltDistance", new Slider("Minimum distance", 3000, 1, 10000));
+        }
+
         private void Drawing_OnDraw(EventArgs args)
         {
             if (Loading.IsLoadingComplete)

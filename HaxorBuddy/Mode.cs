@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,22 @@ namespace HaxorBuddy
     {
         public abstract void Init();
         public abstract void Stop();
-        //public abstract string GetID();
+        public abstract string GetID();
+        public abstract void CreateMenu();
+
+        public static Dictionary<string, Type> GetAllModes()
+        {
+            var list = new Dictionary<string, Type>();
+            var t = Assembly.GetExecutingAssembly().GetTypes();
+            foreach (var item in t)
+            {
+                if (item.BaseType != typeof(Mode)) continue;
+                var c = Activator.CreateInstance(item);
+                var m = item.GetMethod("GetID");
+                if (m != null)
+                    list.Add((string)m.Invoke(c, null), item);
+            }
+            return list;
+        }
     }
 }

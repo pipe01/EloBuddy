@@ -24,7 +24,7 @@ namespace HaxorBuddy
 
         public static bool Debugging = false;
 
-        public void CreateMenu()
+        public override void CreateMenu()
         {
             spellShield = HaxorMenu.haxorMenu.AddSubMenu("Spell Shield", "spellShield");
             spellShield.Add("debug", new CheckBox("Show debug info", false))
@@ -50,7 +50,6 @@ namespace HaxorBuddy
             Game.OnUpdate += Game_OnUpdate;
             Player.OnSpellCast += Player_OnSpellCast;
             
-            CreateMenu();
             string champname = Player.Instance.ChampionName.ToLower();
             if (!Champions.ContainsKey(champname))
             {
@@ -68,6 +67,11 @@ namespace HaxorBuddy
         {
             Game.OnUpdate -= Game_OnUpdate;
             Player.OnSpellCast -= Player_OnSpellCast;
+        }
+
+        public override string GetID()
+        {
+            return "Spell Blocker";
         }
 
         private void Player_OnSpellCast(Obj_AI_Base ser, GameObjectProcessSpellCastEventArgs a)
@@ -106,16 +110,5 @@ namespace HaxorBuddy
         {
             
         }
-    }
-
-    class SpellProjectile
-    {
-        public string SenderName;
-        public SpellSlot Slot;
-        public float Width;
-        public float Delay;
-        public float Speed;
-        public float Range;
-        public Vector2 StartPos;
     }
 }

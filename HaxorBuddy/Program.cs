@@ -23,7 +23,7 @@ namespace HaxorBuddy
             new Program().Init();
         }
 
-        public static Mode[] Modes;
+        public static Dictionary<string, Mode> Modes = new Dictionary<string, Mode>();
 
         public void Init()
         {
@@ -32,29 +32,38 @@ namespace HaxorBuddy
 
         private void Loading_OnLoadingComplete(EventArgs args)
         {
+            var cc = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("[HaxorBuddy] Creating Menus");
             HaxorMenu.Init();
 
-            Modes[0] = new Cooldown();
-            Modes[0].Init();
+            var modes = Mode.GetAllModes();
+            Modes.Clear();
+            foreach (var item in modes)
+            {
+                Mode instance = (Mode)Activator.CreateInstance(item.Value);
+                instance.CreateMenu();
+                if (HaxorMenu.modesMenu[item.Key].Cast<CheckBox>().CurrentValue)
+                {
+                    Console.WriteLine("[HaxorBuddy] Creating " + item);
+                    Modes.Add(item.Key, instance);
+                    Modes[item.Key].Init();
+                }
+            }
 
-            Modes[1] = new LineTracker();
-            Modes[1].Init();
-
-            Modes[2] = new Experience();
-            Modes[2].Init();
-
-            Modes[3] = new SpellBlocker();
-            Modes[3].Init();
-
-            Modes[4] = new AutoActivator();
-            Modes[4].Init();
+            Console.ForegroundColor = cc;
 
             Chat.Print("HaxorBuddy v1.0.0.1 init");
         }
 
-        private bool IsModeActivated(string modeId)
+        public static Mode GetMode(string id)
         {
-            return false;
+            foreach (var item in Modes)
+            {
+                if (item.Key == id)
+                    return item.Value;
+            }
+            return null;
         }
     }
 }

@@ -13,16 +13,6 @@ namespace HaxorBuddy
 {
     class AutoActivator : Mode
     {
-        private bool Active
-        {
-            get { return aaMenu["aaActive"].Cast<CheckBox>().CurrentValue; }
-        }
-
-        private int ActHealth
-        {
-            get { return aaMenu["aaHealth"].Cast<Slider>().CurrentValue; }
-        }
-
         private SpellSlot[] SummsSlots =
             { SpellSlot.Summoner1, SpellSlot.Summoner2 };
 
@@ -41,9 +31,7 @@ namespace HaxorBuddy
 
         public override void Init()
         {
-            CreateMenu();
             Game.OnUpdate += Game_OnUpdate;
-
         }
 
         public override void Stop()
@@ -51,40 +39,43 @@ namespace HaxorBuddy
             Game.OnUpdate -= Game_OnUpdate;
         }
 
-        public void CreateMenu()
+        public override string GetID()
+        {
+            return "Auto Activator";
+        }
+
+        public override void CreateMenu()
         {
             aaMenu = HaxorMenu.haxorMenu.AddSubMenu("Auto Activator", "aaMenu");
-            aaMenu.Add("aaActive", new CheckBox("Active", true));
-            aaMenu.Add("aaDebug", new CheckBox("Show debug info", false));
-            aaMenu.Add("aaHealth", new Slider("Health percentage at which to trigger", 30));
 
-            usummMenu = HaxorMenu.haxorMenu.AddSubMenu("Summoner spells");
-            usummMenu.AddGroupLabel("Summoner spells to use when below trigger health");
+            aaMenu.AddGroupLabel("What to cast when below X% health");
+
+            aaMenu.AddGroupLabel("Summoner spells");
             if (GetSpellSlot("summonerheal") != SpellSlot.Unknown)
             {
-                usummMenu.Add("summonerHeal", new Slider("Use summoner spell Heal", 0));
+                aaMenu.Add("summonerHeal", new Slider("Use summoner spell Heal", 0));
                 HasHeal = true;
             }
             if (GetSpellSlot("summonerbarrier") != SpellSlot.Unknown)
             {
-                usummMenu.Add("summonerBarrier", new Slider("Use summoner spell Barrier", 0));
+                aaMenu.Add("summonerBarrier", new Slider("Use summoner spell Barrier", 0));
                 HasBarrier = true;
             }
+            aaMenu.AddSeparator();
 
-            usMenu = HaxorMenu.haxorMenu.AddSubMenu("Champion spells", "champSpells");
-            usMenu.AddGroupLabel("Spells to cast when below trigger health");
+            aaMenu.AddGroupLabel("Spells");
             foreach (var item in Player.Instance.Spellbook.Spells.Where
                 (o => SpellSlots.Contains(o.Slot)))
             {
-                usMenu.Add("spell" + item.Slot.ToString(), new Slider("Use slot " + item.Slot.ToString(), 0));
+                aaMenu.Add("spell" + item.Slot.ToString(), new Slider("Use slot " + item.Slot.ToString(), 0));
             }
+            aaMenu.AddSeparator();
 
-            itMenu = HaxorMenu.haxorMenu.AddSubMenu("Items", "items");
-            itMenu.AddGroupLabel("Health percentage at which to trigger items");
-            itMenu.AddLabel("If any item is targeted, it will be used on self");
+            aaMenu.AddGroupLabel("Item slots");
+            aaMenu.AddLabel("If any item is targeted, it will be used on self");
             for (int i = 1; i < 8; i++)
             {
-                itMenu.Add("islot" + i, new Slider("Use item on slot " + i, 20));
+                aaMenu.Add("islot" + i, new Slider("Use item on slot " + i, 20));
             }
         }
 

@@ -19,21 +19,27 @@ namespace HaxorBuddy
         public override void Init()
         {
             Drawing.OnEndScene += Drawing_OnEndScene;
-            Loading.OnLoadingComplete += Loading_OnLoadingComplete;
+            this.text = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold));
         }
 
         public override void Stop()
         {
             Drawing.OnEndScene -= Drawing_OnEndScene;
-            Loading.OnLoadingComplete -= Loading_OnLoadingComplete;
+        }
+
+        public override string GetID()
+        {
+            return "Experience";
+        }
+
+        public override void CreateMenu()
+        {
+            HaxorMenu.haxorMenu.AddGroupLabel("Experience");
+            HaxorMenu.haxorMenu.Add("hmAllyExp", new CheckBox("Show ally experience", false));
+            HaxorMenu.haxorMenu.Add("hmEnemyExp", new CheckBox("Show enemy experience", true));
         }
 
         private Text text;
-
-        private void Loading_OnLoadingComplete(EventArgs args)
-        {
-            this.text = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold));
-        }
 
         private void Drawing_OnEndScene(EventArgs args)
         {
