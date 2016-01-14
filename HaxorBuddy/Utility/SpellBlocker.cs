@@ -42,8 +42,9 @@ namespace HaxorBuddy
             }
         }
 
-        public override void Init()
+        public override bool Init()
         {
+            Champions.Clear();
             Champions.Add("sivir", SpellSlot.E);
             Champions.Add("nocturne", SpellSlot.W);
 
@@ -53,14 +54,14 @@ namespace HaxorBuddy
             string champname = Player.Instance.ChampionName.ToLower();
             if (!Champions.ContainsKey(champname))
             {
-                Chat.Print("You didn't pick any champion with spell shield, disabling auto spell blocker.");
-                Game.OnUpdate -= Game_OnUpdate;
-                Player.OnSpellCast -= Player_OnSpellCast;
+                Chat.Print("You didn't pick any champion with spell shield, Auto Spell Shielder won't work.");
+                return false;
             }
             else
             {
                 SpellShield = new Spell.Active(Champions[champname]);
             }
+            return true;
         }
 
         public override void Stop()
@@ -72,6 +73,11 @@ namespace HaxorBuddy
         public override string GetID()
         {
             return "Spell Blocker";
+        }
+
+        public override bool DefaultEnabled()
+        {
+            return false;
         }
 
         private void Player_OnSpellCast(Obj_AI_Base ser, GameObjectProcessSpellCastEventArgs a)

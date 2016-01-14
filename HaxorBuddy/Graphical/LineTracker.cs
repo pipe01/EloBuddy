@@ -13,9 +13,10 @@ namespace HaxorBuddy
 {
     class LineTracker : Mode
     {
-        public override void Init()
+        public override bool Init()
         {
             Drawing.OnDraw += Drawing_OnDraw;
+            return true;
         }
 
         public override void Stop()
@@ -32,6 +33,11 @@ namespace HaxorBuddy
         {
             HaxorMenu.haxorMenu.AddGroupLabel("Line tracker");
             HaxorMenu.haxorMenu.Add("ltDistance", new Slider("Minimum distance", 3000, 1, 10000));
+        }
+
+        public override bool DefaultEnabled()
+        {
+            return true;
         }
 
         private void Drawing_OnDraw(EventArgs args)

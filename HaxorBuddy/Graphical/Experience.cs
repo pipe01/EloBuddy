@@ -16,10 +16,11 @@ namespace HaxorBuddy
 {
     class Experience : Mode
     {
-        public override void Init()
+        public override bool Init()
         {
             Drawing.OnEndScene += Drawing_OnEndScene;
             this.text = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold));
+            return true;
         }
 
         public override void Stop()
@@ -37,6 +38,11 @@ namespace HaxorBuddy
             HaxorMenu.haxorMenu.AddGroupLabel("Experience");
             HaxorMenu.haxorMenu.Add("hmAllyExp", new CheckBox("Show ally experience", false));
             HaxorMenu.haxorMenu.Add("hmEnemyExp", new CheckBox("Show enemy experience", true));
+        }
+
+        public override bool DefaultEnabled()
+        {
+            return true;
         }
 
         private Text text;

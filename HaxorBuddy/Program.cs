@@ -38,22 +38,27 @@ namespace HaxorBuddy
             HaxorMenu.Init();
 
             var modes = Mode.GetAllModes();
-            Modes.Clear();
             foreach (var item in modes)
             {
                 Mode instance = (Mode)Activator.CreateInstance(item.Value);
                 instance.CreateMenu();
                 if (HaxorMenu.modesMenu[item.Key].Cast<CheckBox>().CurrentValue)
                 {
-                    Console.WriteLine("[HaxorBuddy] Creating " + item);
-                    Modes.Add(item.Key, instance);
-                    Modes[item.Key].Init();
+                    instance.Init();
+                    Console.WriteLine("[HaxorBuddy] [Modes] Created " + item.Key);
                 }
+                else
+                {
+                    Console.WriteLine("[HaxorBuddy] [Modes] Skipped " + item.Key);
+                }
+                Modes.Add(item.Key, instance);
             }
 
             Console.ForegroundColor = cc;
 
-            Chat.Print("HaxorBuddy v1.0.0.1 init");
+            
+
+            Chat.Print("HaxorBuddy v1.1.0.0 init");
         }
 
         public static Mode GetMode(string id)

@@ -9,9 +9,10 @@ namespace HaxorBuddy
 {
     abstract class Mode
     {
-        public abstract void Init();
+        public abstract bool Init();
         public abstract void Stop();
         public abstract string GetID();
+        public abstract bool DefaultEnabled();
         public abstract void CreateMenu();
 
         public static Dictionary<string, Type> GetAllModes()

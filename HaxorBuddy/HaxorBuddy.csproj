@@ -74,6 +74,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Awareness\LastKnownPosition.cs" />
+    <Compile Include="Graphical\EnemyHud.cs" />
+    <Compile Include="Graphical\SpellRanges.cs" />
     <Compile Include="Mode.cs" />
     <Compile Include="Utility\AutoActivator.cs" />
     <Compile Include="Utility\SpellBlocker.cs" />

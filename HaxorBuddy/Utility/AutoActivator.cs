@@ -24,14 +24,15 @@ namespace HaxorBuddy
 
         private Dictionary<string, int> CastedSpells = new Dictionary<string, int>();
 
-        private Menu aaMenu, usummMenu, usMenu, itMenu;
+        private Menu aaMenu, itMenu, usummMenu, usMenu;
         private bool HasHeal, HasBarrier;
 
         private List<int> PlayerInventory = new List<int>();
 
-        public override void Init()
+        public override bool Init()
         {
             Game.OnUpdate += Game_OnUpdate;
+            return true;
         }
 
         public override void Stop()
@@ -73,10 +74,17 @@ namespace HaxorBuddy
 
             aaMenu.AddGroupLabel("Item slots");
             aaMenu.AddLabel("If any item is targeted, it will be used on self");
-            for (int i = 1; i < 8; i++)
+            for (int i = 1; i < 7; i++)
             {
-                aaMenu.Add("islot" + i, new Slider("Use item on slot " + i, 20));
+                aaMenu.Add("islot" + i, new Slider("Use item on slot " + i));
             }
+
+            aaMenu.AddSeparator();
+        }
+
+        public override bool DefaultEnabled()
+        {
+            return false;
         }
 
         private SpellSlot GetSpellSlot(string spellname, AIHeroClient target)
@@ -112,9 +120,6 @@ namespace HaxorBuddy
         {
             OldHP = HP;
             HP = (int)Player.Instance.HealthPercent;
-
-            //if (OldHP != HP)
-            //    Chat.Print("OLD: " + OldHP + " NEW: " + HP, System.Drawing.Color.Red);
 
             if (HP < OldHP)
             {

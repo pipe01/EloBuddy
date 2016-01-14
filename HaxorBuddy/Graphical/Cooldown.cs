@@ -16,10 +16,11 @@ namespace HaxorBuddy
 {
     class Cooldown : Mode
     {
-        public override void Init()
+        public override bool Init()
         {
             Drawing.OnEndScene += Drawing_OnEndScene;
             this.text = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold));
+            return true;
         }
 
         public override void Stop()
@@ -39,6 +40,11 @@ namespace HaxorBuddy
             HaxorMenu.haxorMenu.Add("hmEnemyCD", new CheckBox("Show enemy cooldowns", true));
         }
 
+        public override bool DefaultEnabled()
+        {
+            return true;
+        }
+
         private Text text;
 
         private readonly SpellSlot[] SpellsSlots =
@@ -46,7 +52,6 @@ namespace HaxorBuddy
 
         private void Drawing_OnEndScene(EventArgs args)
         {
-            if (!Loading.IsLoadingComplete) return;
             if (HaxorMenu.haxorMenu["hmEnemyCD"].Cast<CheckBox>().CurrentValue)
             {
                 foreach (var item in EntityManager.Heroes.Enemies.Where(o => o.IsHPBarRendered))
