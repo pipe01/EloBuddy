@@ -23,5 +23,17 @@ namespace HaxorBuddy
         {
             return position.To3D().IsOnScreen();
         }
+
+        public static float GetAngle(float x1, float x2, float y1, float y2)
+        {
+            float xDiff = x2 - x1;
+            float yDiff = y2 - y1;
+            return (float)(Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI);
+        }
+
+        public static Vector2 Reverse(Vector2 vec, Vector2 origin)
+        {
+            return new Vector2(origin.X - vec.X, origin.Y - vec.Y);
+        }
     }
 }

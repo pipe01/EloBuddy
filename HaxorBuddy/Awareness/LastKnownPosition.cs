@@ -16,7 +16,7 @@ namespace HaxorBuddy.Awareness
     class LastKnownPosition : Mode
     {
         private Dictionary<string, PositionData> Positions = new Dictionary<string, PositionData>();
-        private Text ChampText;
+        private Text ChampText, ChampTextMinimap;
 
         public override void CreateMenu()
         {
@@ -36,6 +36,7 @@ namespace HaxorBuddy.Awareness
         public override bool Init()
         {
             ChampText = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold));
+            ChampTextMinimap = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold));
 
             Drawing.OnEndScene += Drawing_OnEndScene;
             Game.OnTick += Game_OnTick;
@@ -48,14 +49,18 @@ namespace HaxorBuddy.Awareness
             foreach (var item in EntityManager.Heroes.Enemies.Where(o => !o.IsMe && !o.IsRecalling()))
             {
                 if (!item.IsHPBarRendered && !Positions.ContainsKey(item.Name) && !item.IsDead)
-                    Positions.Add(item.Name, new PositionData()
-                    {
-                        Name = item.Name,
-                        ChampionName = item.ChampionName,
-                        WorldPosition = item.Position,
-                        MinimapPosition = Drawing.WorldToMinimap(item.Position),
-                        ScreenPosition = Drawing.WorldToScreen(item.Position),
-                    });
+                {
+                    var posdata = new PositionData();
+
+                    posdata.Name = item.Name;
+                    posdata.ChampionName = item.ChampionName;
+                    posdata.WorldPosition = item.Position;
+                    posdata.MinimapPosition = Drawing.WorldToMinimap(item.Position);
+                    posdata.ScreenPosition = Drawing.WorldToScreen(item.Position);
+                    posdata.Angle = item.Direction.To2D();
+
+                    Positions.Add(item.Name, posdata);
+                }
                 else if (item.IsHPBarRendered && Positions.ContainsKey(item.Name) || item.IsDead)
                     Positions.Remove(item.Name);
             }
@@ -63,15 +68,15 @@ namespace HaxorBuddy.Awareness
 
         private void Drawing_OnEndScene(EventArgs args)
         {
-            foreach (var item in Positions)
+            foreach (var item in Positions.Values)
             {
-                var screenpos = Drawing.WorldToScreen(item.Value.WorldPosition);
-                var minimappos = item.Value.MinimapPosition;
-                //var hero = Utils.GetHeroFromName(item.Key);
+                var screenpos = Drawing.WorldToScreen(item.WorldPosition);
+                var minimappos = Drawing.WorldToMinimap(Player.Instance.Position);
 
-      
-                ChampText.Draw(item.Value.ChampionName, Color.Magenta, (int)screenpos.X, (int)screenpos.Y);
-                ChampText.Draw(item.Value.ChampionName[0].ToString(), Color.Magenta, (int)minimappos.X, (int)minimappos.Y);
+                ChampText.Draw(item.ChampionName, Color.Magenta, (int)screenpos.X, (int)screenpos.Y);
+
+                ChampTextMinimap.Draw(item.ChampionName[0].ToString(), Color.Magenta,
+                    (int)minimappos.X, (int)minimappos.Y);
                 //Chat.Print(minimappos.X + " " + minimappos.Y + " " + item.Value.ChampionName);
             }
         }
@@ -88,5 +93,6 @@ namespace HaxorBuddy.Awareness
         public string Name, ChampionName;
         public Vector2 ScreenPosition, MinimapPosition;
         public Vector3 WorldPosition;
+        public Vector2 Angle;
     }
 }
