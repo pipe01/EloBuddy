@@ -24,6 +24,7 @@ namespace HaxorBuddy
         }
 
         public static Dictionary<string, Mode> Modes = new Dictionary<string, Mode>();
+        public static Dictionary<string, bool> EnabledModes = new Dictionary<string, bool>();
 
         public void Init()
         {
@@ -46,10 +47,12 @@ namespace HaxorBuddy
                 {
                     instance.Init();
                     Console.WriteLine("[HaxorBuddy] [Modes] Created " + item.Key);
+                    EnabledModes.Add(item.Key, true);
                 }
                 else
                 {
                     Console.WriteLine("[HaxorBuddy] [Modes] Skipped " + item.Key);
+                    EnabledModes.Add(item.Key, false);
                 }
                 Modes.Add(item.Key, instance);
             }
@@ -59,6 +62,26 @@ namespace HaxorBuddy
             
 
             Chat.Print("HaxorBuddy v1.1.0.0 init");
+        }
+
+        public static void ModeStop(string id)
+        {
+            if (EnabledModes[id])
+            {
+                Chat.Print("disable " + id);
+                Modes[id].Stop();
+                EnabledModes[id] = false;
+            }
+        }
+
+        public static void ModeStart(string id)
+        {
+            if (!EnabledModes[id])
+            {
+                Chat.Print("enable " + id);
+                Modes[id].Init();
+                EnabledModes[id] = true;
+            }
         }
 
         public static Mode GetMode(string id)

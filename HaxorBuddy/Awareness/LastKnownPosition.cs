@@ -15,7 +15,7 @@ namespace HaxorBuddy.Awareness
 {
     class LastKnownPosition : Mode
     {
-        private Dictionary<string, PositionData> Positions = new Dictionary<string, PositionData>();
+        public Dictionary<string, PositionData> Positions = new Dictionary<string, PositionData>();
         private Text ChampText, ChampTextMinimap;
 
         public override void CreateMenu()
