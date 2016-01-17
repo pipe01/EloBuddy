@@ -45,9 +45,8 @@ namespace HaxorBuddy
                 instance.CreateMenu();
                 if (HaxorMenu.modesMenu[item.Key].Cast<CheckBox>().CurrentValue)
                 {
-                    instance.Init();
+                    EnabledModes.Add(item.Key, instance.Init());
                     Console.WriteLine("[HaxorBuddy] [Modes] Created " + item.Key);
-                    EnabledModes.Add(item.Key, true);
                 }
                 else
                 {
@@ -68,7 +67,6 @@ namespace HaxorBuddy
         {
             if (EnabledModes[id])
             {
-                Chat.Print("disable " + id);
                 Modes[id].Stop();
                 EnabledModes[id] = false;
             }
@@ -78,9 +76,7 @@ namespace HaxorBuddy
         {
             if (!EnabledModes[id])
             {
-                Chat.Print("enable " + id);
-                Modes[id].Init();
-                EnabledModes[id] = true;
+                EnabledModes[id] = Modes[id].Init();
             }
         }
 
