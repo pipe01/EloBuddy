@@ -22,6 +22,7 @@ namespace HaxorBuddy
             foreach (var item in t)
             {
                 if (item.BaseType != typeof(Mode)) continue;
+                Console.WriteLine(item.Name);
                 var c = Activator.CreateInstance(item);
                 var m = item.GetMethod("GetID");
                 if (m != null)

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HaxorBuddy.Champions
+namespace HaxorBuddy.Utility
 {
     class VelkozCombo : Mode
     {
@@ -138,13 +138,13 @@ namespace HaxorBuddy.Champions
 
         private float GetQDamage(int level)
         {
-            float basedmg = new float[] { 80, 120, 160, 200, 240}[level - 1];
+            float basedmg = new float[] { 80, 120, 160, 200, 240 }[level - 1];
             return (float)(basedmg + Player.Instance.TotalMagicalDamage * 0.6);
         }
 
         private float GetWMaxDamage(int level)
         {
-            float basedmg = new float[] { 75, 125, 175, 225, 275}[level - 1];
+            float basedmg = new float[] { 75, 125, 175, 225, 275 }[level - 1];
             return (float)(basedmg + Player.Instance.TotalMagicalDamage * 0.625);
         }
 
@@ -162,7 +162,7 @@ namespace HaxorBuddy.Champions
 
         public override void Stop()
         {
-            
+
         }
     }
 }
