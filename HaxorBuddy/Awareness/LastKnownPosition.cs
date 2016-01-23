@@ -60,6 +60,10 @@ namespace HaxorBuddy.Awareness
                     posdata.MinimapPosition = Drawing.WorldToMinimap(item.Position);
                     posdata.ScreenPosition = Drawing.WorldToScreen(item.Position);
                     posdata.Angle = item.Direction.To2D();
+                    posdata.LastSeenTime = Game.Time;
+                    posdata.HPRegenRate = item.HPRegenRate;
+                    posdata.TotalHP = item.Health;
+                    posdata.MaxHP = item.MaxHealth;
 
                     Positions.Add(item.Name, posdata);
                 }
@@ -77,7 +81,9 @@ namespace HaxorBuddy.Awareness
                 //var minimappos = Drawing.WorldToMinimap(Player.Instance.Position);
 
                 ChampText.Draw(item.ChampionName, Color.Magenta, (int)screenpos.X, (int)screenpos.Y);
-                ChampHP.Draw(item.PercentHP + "%", Color.Red, (int)screenpos.X, (int)screenpos.Y + 11);
+
+                var percenthp = (item.CalculateHP() / item.MaxHP) * 100;
+                ChampHP.Draw(Math.Ceiling(percenthp) + "%", Color.Red, (int)screenpos.X, (int)screenpos.Y + 11);
 
                 //ChampTextMinimap.Draw(item.ChampionName[0].ToString(), Color.Magenta,
                 //    (int)minimappos.X, (int)minimappos.Y);
@@ -98,5 +104,16 @@ namespace HaxorBuddy.Awareness
         public Vector3 WorldPosition;
         public Vector2 Angle;
         public int PercentHP;
+        public float TotalHP;
+        public float MaxHP;
+        public float HPRegenRate;
+        public float LastSeenTime;
+
+        public float CalculateHP()
+        {
+            var elapsedtime = Game.Time - LastSeenTime;
+            var regenerated = elapsedtime * HPRegenRate;
+            return TotalHP + regenerated > MaxHP ? MaxHP : TotalHP + regenerated;
+        }
     }
 }
