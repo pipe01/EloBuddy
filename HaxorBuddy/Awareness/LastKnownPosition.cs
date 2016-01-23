@@ -74,14 +74,13 @@ namespace HaxorBuddy.Awareness
             foreach (var item in Positions.Values)
             {
                 var screenpos = Drawing.WorldToScreen(item.WorldPosition);
-                var minimappos = Drawing.WorldToMinimap(Player.Instance.Position);
+                //var minimappos = Drawing.WorldToMinimap(Player.Instance.Position);
 
                 ChampText.Draw(item.ChampionName, Color.Magenta, (int)screenpos.X, (int)screenpos.Y);
                 ChampHP.Draw(item.PercentHP + "%", Color.Red, (int)screenpos.X, (int)screenpos.Y + 11);
 
-                ChampTextMinimap.Draw(item.ChampionName[0].ToString(), Color.Magenta,
-                    (int)minimappos.X, (int)minimappos.Y);
-                //Chat.Print(minimappos.X + " " + minimappos.Y + " " + item.Value.ChampionName);
+                //ChampTextMinimap.Draw(item.ChampionName[0].ToString(), Color.Magenta,
+                //    (int)minimappos.X, (int)minimappos.Y);
             }
         }
 
