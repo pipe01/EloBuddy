@@ -60,7 +60,7 @@ namespace HaxorBuddy
 
             
 
-            Chat.Print("HaxorBuddy v1.3.0.0 init");
+            Chat.Print("HaxorBuddy v1.3.0.1 init");
         }
 
         public static void ModeStop(string id)
