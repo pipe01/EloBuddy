@@ -79,21 +79,21 @@ namespace HaxorBuddy.Graphical
 
         public override bool Init()
         {
-            if (!Loaded)
+            
+            var res = new ResourceManager(typeof(Resources));
+
+            foreach (var item in summNames)
             {
-                var res = new ResourceManager(typeof(Resources));
-
-                foreach (var item in summNames)
-                {
-                    Loader.Load(item, (Bitmap)res.GetObject(item));
-                    SummonerSpellsIcons.Add(item, new Sprite(() => Loader[item]));
-                }
-
-                Loader.Load("enemyhudbg", res.GetObject("enemyhud") as Bitmap);
-                EnemyHUDBackground = new Sprite(() => Loader["enemyhudbg"]);
-
-                Loaded = true;
+                if (Loaded) Loader.Unload(item);
+                Loader.Load(item, (Bitmap)res.GetObject(item));
+                SummonerSpellsIcons.Add(item, new Sprite(() => Loader[item]));
             }
+
+            Loader.Load("enemyhudbg", res.GetObject("enemyhud") as Bitmap);
+            EnemyHUDBackground = new Sprite(() => Loader["enemyhudbg"]);
+
+            Loaded = true;
+            
             
             champName = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold));
             cdText = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular));
@@ -114,12 +114,20 @@ namespace HaxorBuddy.Graphical
 
             foreach (var champ in EntityManager.Heroes.Enemies)
             {
+                string cname = champ.ChampionName;
+                if (champ.ChampionName == "MonkeyKing")
+                {
+                    cname = "Wukong";
+                } else if (champ.ChampionName.Length > 8)
+                {
+                    cname = champ.ChampionName.Substring(0, 7);
+                }
+
                 int yOffset = index * SpaceBetweenChamps + SpaceFromTop + 2;
                 Vector2 infoPos = new Vector2(31, yOffset);
                 
                 //Champ name
-
-                champName.Draw(champ.ChampionName, Color.Goldenrod, infoPos);
+                champName.Draw(cname, Color.Goldenrod, infoPos);
 
                 
                 //Cooldowns
@@ -146,7 +154,15 @@ namespace HaxorBuddy.Graphical
                     var cooldown = spell.CooldownExpires - Game.Time;
                     if (cooldown < 0) cooldown = 0;
 
-                    SummonerSpellsIcons[spell.Name].Draw(summPos);
+                    try
+                    {
+                        SummonerSpellsIcons[spell.Name].Draw(summPos);
+                    }
+                    catch (Exception)
+                    {
+                        
+                    }
+                    
 
                     summText.Draw(Math.Ceiling(cooldown).ToString(),
                         Color.LawnGreen, (int)summPos.X, (int)summPos.Y + 17);

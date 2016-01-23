@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Awareness\LastKnownPosition.cs" />
+    <Compile Include="Awareness\WardTracker.cs" />
     <Compile Include="Graphical\EnemyHud.cs" />
     <Compile Include="Graphical\SpellRanges.cs" />
     <Compile Include="Mode.cs" />
@@ -83,6 +84,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="UI\MouseHandler.cs" />
+    <Compile Include="UI\Window.cs" />
     <Compile Include="Utility\AutoActivator.cs" />
     <Compile Include="Utility\SpellBlocker.cs" />
     <Compile Include="ConfManager.cs" />
@@ -145,6 +148,7 @@
   <ItemGroup>
     <None Include="Resources\enemyhud.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

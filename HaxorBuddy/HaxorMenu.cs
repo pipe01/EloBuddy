@@ -45,9 +45,7 @@ namespace HaxorBuddy
             if (args.NewValue == false)
                 Program.ModeStop(sender.DisplayName);
             else
-                Program.ModeStart(sender.DisplayName);
-
-            RefreshModes();
+                Program.ModeStart(sender.DisplayName);            
             
             Console.WriteLine("[HaxorBuddy] [Modes] {0} {1}", args.NewValue ? "Enabling" : "Disabling", sender.DisplayName);
         }

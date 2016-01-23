@@ -16,7 +16,7 @@ namespace HaxorBuddy.Awareness
     class LastKnownPosition : Mode
     {
         public Dictionary<string, PositionData> Positions = new Dictionary<string, PositionData>();
-        private Text ChampText, ChampTextMinimap;
+        private Text ChampText, ChampHP, ChampTextMinimap;
 
         public override void CreateMenu()
         {
@@ -36,6 +36,7 @@ namespace HaxorBuddy.Awareness
         public override bool Init()
         {
             ChampText = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold));
+            ChampHP = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold));
             ChampTextMinimap = new Text(string.Empty, new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold));
 
             Drawing.OnEndScene += Drawing_OnEndScene;
@@ -52,6 +53,7 @@ namespace HaxorBuddy.Awareness
                 {
                     var posdata = new PositionData();
 
+                    posdata.PercentHP = (int)item.HealthPercent;
                     posdata.Name = item.Name;
                     posdata.ChampionName = item.ChampionName;
                     posdata.WorldPosition = item.Position;
@@ -64,6 +66,7 @@ namespace HaxorBuddy.Awareness
                 else if (item.IsHPBarRendered && Positions.ContainsKey(item.Name) || item.IsDead)
                     Positions.Remove(item.Name);
             }
+
         }
 
         private void Drawing_OnEndScene(EventArgs args)
@@ -74,6 +77,7 @@ namespace HaxorBuddy.Awareness
                 var minimappos = Drawing.WorldToMinimap(Player.Instance.Position);
 
                 ChampText.Draw(item.ChampionName, Color.Magenta, (int)screenpos.X, (int)screenpos.Y);
+                ChampHP.Draw(item.PercentHP + "%", Color.Red, (int)screenpos.X, (int)screenpos.Y + 11);
 
                 ChampTextMinimap.Draw(item.ChampionName[0].ToString(), Color.Magenta,
                     (int)minimappos.X, (int)minimappos.Y);
@@ -94,5 +98,6 @@ namespace HaxorBuddy.Awareness
         public Vector2 ScreenPosition, MinimapPosition;
         public Vector3 WorldPosition;
         public Vector2 Angle;
+        public int PercentHP;
     }
 }

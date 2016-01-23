@@ -35,5 +35,10 @@ namespace HaxorBuddy
         {
             return new Vector2(origin.X - vec.X, origin.Y - vec.Y);
         }
+
+        public static bool IsOdd(int value)
+        {
+            return value % 2 != 0;
+        }
     }
 }
