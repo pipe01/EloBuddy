@@ -20,7 +20,7 @@ namespace HaxorBuddy.Graphical
     {
         private int SpaceBetweenChamps = 31;
         private int XOffset = 20;
-        private int SpaceFromTop = Drawing.Height - 160;
+        private int SpaceFromTop = Drawing.Height - 167;
         private int SpaceFromChampName = 60;
         private int SpaceBetweenCD = 19;
 
@@ -105,6 +105,7 @@ namespace HaxorBuddy.Graphical
             return true;
         }
 
+        private bool errored;
         private void Drawing_OnEndScene(EventArgs args)
         {
             int index = 0;
@@ -160,7 +161,11 @@ namespace HaxorBuddy.Graphical
                     }
                     catch (Exception)
                     {
-                        
+                        if (!errored)
+                        {
+                            Chat.Print(spell.Name);
+                            errored = true;
+                        }
                     }
                     
 

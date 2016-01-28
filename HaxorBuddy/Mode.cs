@@ -14,6 +14,7 @@ namespace HaxorBuddy
         public abstract string GetID();
         public abstract bool DefaultEnabled();
         public abstract void CreateMenu();
+        public virtual void PreInit() { }
 
         public static Dictionary<string, Type> GetAllModes()
         {

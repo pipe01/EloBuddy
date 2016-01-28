@@ -113,8 +113,8 @@ namespace HaxorBuddy.Awareness
 
         private void Player_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            //if (WardSpells.Contains(args.SData.Name) && sender.Team != Player.Instance.Team)
-            if (WardSpells.Contains(args.SData.Name))
+            if (WardSpells.Contains(args.SData.Name) && sender.Team != Player.Instance.Team)
+            //if (WardSpells.Contains(args.SData.Name))
             {
                 var level = ((AIHeroClient)sender).Level;
                 float expires = Game.Time + GetWardDuration(args.SData.Name, level);
@@ -181,6 +181,7 @@ namespace HaxorBuddy.Awareness
             public int Duration;
             public int NetworkID;
             public int Health;
+
             public Ward(int snid, Vector3 pos, string wt, GameObjectTeam st, float e, int hp, int duration)
             {
                 this.SenderNetworkID = snid;

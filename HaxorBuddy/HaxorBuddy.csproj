@@ -79,6 +79,8 @@
     <Compile Include="Graphical\EnemyHud.cs" />
     <Compile Include="Graphical\SpellRanges.cs" />
     <Compile Include="Mode.cs" />
+    <Compile Include="PlayersInfo\Ranks.cs" />
+    <Compile Include="PlayersInfo\RiotAPI.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -64,13 +64,22 @@ namespace HaxorBuddy.Awareness
                     posdata.HPRegenRate = item.HPRegenRate;
                     posdata.TotalHP = item.Health;
                     posdata.MaxHP = item.MaxHealth;
+                    posdata.ExpiresTime = Game.Time + PositionData.PositionDuration;
 
                     Positions.Add(item.Name, posdata);
                 }
                 else if (item.IsHPBarRendered && Positions.ContainsKey(item.Name) || item.IsDead)
                     Positions.Remove(item.Name);
+
             }
 
+            foreach (var item in Positions)
+            {
+                if (Game.Time > item.Value.ExpiresTime)
+                {
+                    Positions.Remove(item.Value.Name);
+                }
+            }
         }
 
         private void Drawing_OnEndScene(EventArgs args)
@@ -78,15 +87,15 @@ namespace HaxorBuddy.Awareness
             foreach (var item in Positions.Values)
             {
                 var screenpos = Drawing.WorldToScreen(item.WorldPosition);
-                //var minimappos = Drawing.WorldToMinimap(Player.Instance.Position);
+                var minimappos = Drawing.WorldToMinimap(Player.Instance.Position);
 
                 ChampText.Draw(item.ChampionName, Color.Magenta, (int)screenpos.X, (int)screenpos.Y);
 
                 var percenthp = (item.CalculateHP() / item.MaxHP) * 100;
                 ChampHP.Draw(Math.Ceiling(percenthp) + "%", Color.Red, (int)screenpos.X, (int)screenpos.Y + 11);
 
-                //ChampTextMinimap.Draw(item.ChampionName[0].ToString(), Color.Magenta,
-                //    (int)minimappos.X, (int)minimappos.Y);
+                ChampTextMinimap.Draw(item.ChampionName[0].ToString(), Color.Magenta,
+                  (int)minimappos.X, (int)minimappos.Y);
             }
         }
 
@@ -99,6 +108,8 @@ namespace HaxorBuddy.Awareness
 
     public class PositionData
     {
+        public const int PositionDuration = 50;
+
         public string Name, ChampionName;
         public Vector2 ScreenPosition, MinimapPosition;
         public Vector3 WorldPosition;
@@ -108,6 +119,7 @@ namespace HaxorBuddy.Awareness
         public float MaxHP;
         public float HPRegenRate;
         public float LastSeenTime;
+        public float ExpiresTime;
 
         public float CalculateHP()
         {
