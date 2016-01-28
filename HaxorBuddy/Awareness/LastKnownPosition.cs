@@ -87,7 +87,7 @@ namespace HaxorBuddy.Awareness
             foreach (var item in Positions.Values)
             {
                 var screenpos = Drawing.WorldToScreen(item.WorldPosition);
-                var minimappos = Drawing.WorldToMinimap(Player.Instance.Position);
+                var minimappos = item.MinimapPosition;
 
                 ChampText.Draw(item.ChampionName, Color.Magenta, (int)screenpos.X, (int)screenpos.Y);
 
